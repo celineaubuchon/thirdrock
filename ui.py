@@ -19,7 +19,7 @@ def main():
     glRotatef(0.0, 0.0, 0.0, 0.0) # not doing anything right now
 
     #initialize asteroid field 
-    asteroid_field = AsteroidField(20)
+    asteroid_field = AsteroidField(20) # takes in number of asteroids
 
     #infinite loop
     while True:
@@ -30,13 +30,21 @@ def main():
 
         # clear color and depth buffers at the beginning of current frame
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+        # translates scene 
+        glTranslatef(0.0, 0.0, 0.01)
+
+        # draws each asteroid
         for asteroid in asteroid_field.asteroids:
+
             (r_x, r_y, r_z) = asteroid.rotation_data
             (t_x, t_y, t_z) = asteroid.translation_data
-            asteroid.rotate((r_x, r_y, r_z)) # permanently rotates each vertex
+            # permanently rotates each vertex about the origin
+            asteroid.rotate((r_x, r_y, r_z))
+
+            # draws the current asteroid
             glPushMatrix()
-            glTranslatef(t_x, t_y, t_z) # temporarily translates for drawing
-            asteroid.draw()
+            glTranslatef(t_x, t_y, t_z) # translates it to its location in space
+            asteroid.draw() # draws it
             glPopMatrix()
             
         pygame.display.flip() # draw the buffers

@@ -5,6 +5,7 @@ import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from shapes import *
+from utilities import *
 
 
                    ########################################
@@ -17,29 +18,16 @@ class Asteroid:
     def __init__(self, verts, edges):
         self.vertices = verts
         self.edges = edges
-        self.translation_data = self.gen_randXYZ(-2.0, 2.0)
-        self.rotation_data = self.gen_randXYZ(-0.5, 0.5)
-
-    def gen_randXYZ(self, min, max):
-        x = random.uniform(min, max)
-        y = random.uniform(min, max)
-        z = random.uniform(min, max)
-        return (x, y, z)
+        self.translation_data = gen_randXYZ(-2.0, 2.0)
+        self.rotation_data = gen_randXYZ(-0.5, 0.5)
+        # set random location in space
+        #apply_transformation(self.vertices, \
+            #gen_translation_mat(gen_randXYZ(-2.0, 2.0)))
 
     def rotate(self, ang):
-        to_deg = math.pi/180.0
-        x = to_deg * ang[0]; y = to_deg * ang[1]; z = to_deg * ang[2]
-        rot_mat = [# source: https://en.wikipedia.org/wiki/Rotation_matrix 
-            [cos(z)*cos(y), cos(z)*sin(y)*sin(x) - sin(z)*cos(x), cos(z)*sin(y)*cos(x) + sin(z)*sin(x)],
-            [sin(z)*cos(y), sin(z)*sin(y)*sin(x) + cos(z)*cos(x), sin(z)*sin(y)*cos(x) - cos(z)*sin(x)],
-            [-sin(y), cos(y)*sin(x), cos(y)*cos(x)]]
-        
-        for i in range(len(self.vertices)):
-            v = self.vertices[i]
-            v = np.array([v[0], v[1], v[2]])
-            v = np.dot(rot_mat, v)
-            v = (v[0], v[1], v[2])
-            self.vertices[i] = v
+    # rotates asteroid by ang, and xyz rotation vector
+        rot_mat = gen_rotation_mat(ang)
+        apply_transformation(self.vertices, rot_mat)
 
     def draw(self):
         drawShapeLines(self.vertices, self.edges)
