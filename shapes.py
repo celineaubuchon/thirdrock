@@ -38,7 +38,42 @@ def cube():
                    ########################################
 ####################               SPHERE                 #####################
                    ########################################
+def gen_ico_edges(row_length, row_count):
 
+    edges = []
+    # top
+    for i in range(1, row_length + 1):
+        edges.append((0, i))
+
+    # mid-rings
+    for i in range(1, row_length * row_count + 1):
+        if (i % row_length) == 0:
+            edges.append((i, i - row_length + 1))
+        else:
+            edges.append((i, i + 1))
+    
+    # connect rings
+    for i in range(row_count - 1):
+        for j in range(row_length):
+            first = 1 + i*j + j
+            second = 1 + i*j + j + row_length
+            if j == row_length - 1:
+                1
+                edges.append((first, second))
+                edges.append((second, first - row_length + 1))
+            else:
+                edges.append((first, second))
+                edges.append((first + 1, second))
+
+
+    # bottom
+    upper = row_count * row_length + 1
+    lower = upper - row_length
+    for i in range(lower, upper):
+        edges.append((i, upper))
+    
+    return edges
+     
 def gen_icosahedron(radius):
 # generates vertice and edge lists for a basic icosahedron, thank you to 
     ## http://www.songho.ca/opengl/gl_sphere.html for reference on how to do this
@@ -86,9 +121,14 @@ def gen_icosahedron(radius):
         (1, 6), (2, 6), (2, 7), (3, 7), (3, 8), (4, 8), (4, 9), (5, 9), (5, 10), (10, 1),
         (6, 11), (7, 11), (8, 11), (9, 11), (10, 11) # mid section to bottom edges
     ]
+    edges = gen_ico_edges(5, 2)
 
     # return the vertices
     return (vertices, edges)
+def gen_icosphere(radius, subdivs):
+    # get vertices for icosehedron
+    verts = gen_icosahedron(radius)[0]
+
 
 def sphere(radius):
     (verts, edges) = gen_icosahedron(radius)

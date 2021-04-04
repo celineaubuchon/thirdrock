@@ -29,3 +29,10 @@ class AsteroidField:
             asteroids.append(Asteroid(verts, edges))
         return asteroids
 
+    def add_asteroid(self):
+        [verts, edges] = gen_icosahedron(radius)
+        self.asteroids.append(Asteroid(verts, edges))
+
+    def del_asteroid(self, asteroid):
+        self.asteroids.remove(asteroid)
+
