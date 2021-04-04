@@ -18,11 +18,9 @@ class Asteroid:
     def __init__(self, verts, edges):
         self.vertices = verts
         self.edges = edges
-        self.translation_data = gen_randXYZ(-2.0, 2.0)
+        self.translation_data = gen_randXYZ(-6.0, 6.0)
         self.rotation_data = gen_randXYZ(-0.5, 0.5)
-        # set random location in space
-        #apply_transformation(self.vertices, \
-            #gen_translation_mat(gen_randXYZ(-2.0, 2.0)))
+        self.scale_data = gen_randXYZ(0.15, 0.45)
 
     def rotate(self, ang):
     # rotates asteroid by ang, and xyz rotation vector

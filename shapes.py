@@ -1,7 +1,10 @@
 import math
+import random
 import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from MeshLoader import MeshLoader
+from utilities import *
 
 
                    ########################################
@@ -39,6 +42,10 @@ def cube():
 ####################               SPHERE                 #####################
                    ########################################
 def gen_ico_edges(row_length, row_count):
+# generates an edge list for an icosphere based on row_length and row_count
+    # However, I think I made this for nothing because the ordering of the
+    # vertices is specific in this case, and I won't generate that in the 
+    # same way. Still, a fun exercise.
 
     edges = []
     # top
@@ -113,26 +120,72 @@ def gen_icosahedron(radius):
     vertices[-1] = (0, 0, -radius)
 
     ## SECOND, calculate the edges of the icosahedron
-    edges = [
-        (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), # top to mid section edges
-        (1, 2), (2, 3), (3, 4), (4, 5), (5, 1), # first row connecting edges
-        (6, 7), (7, 8), (8, 9), (9, 10), (10, 6), # second row connecting edges
-        # connecting row edges
-        (1, 6), (2, 6), (2, 7), (3, 7), (3, 8), (4, 8), (4, 9), (5, 9), (5, 10), (10, 1),
-        (6, 11), (7, 11), (8, 11), (9, 11), (10, 11) # mid section to bottom edges
-    ]
     edges = gen_ico_edges(5, 2)
 
     # return the vertices
     return (vertices, edges)
-def gen_icosphere(radius, subdivs):
-    # get vertices for icosehedron
-    verts = gen_icosahedron(radius)[0]
-
 
 def sphere(radius):
     (verts, edges) = gen_icosahedron(radius)
     drawShapeLines(verts, edges)
+
+                   ########################################
+####################               OBJ MESH               #####################
+                   ########################################
+
+def load_mesh(filepath):
+    mesh_loader = MeshLoader(filepath)
+    [vertices, edges] = mesh_loader.load_mesh()
+    return (vertices, edges)
+
+                   ########################################
+####################               Asteroid               #####################
+                   ########################################
+
+def gen_asteroid():
+    [verts, edges] = load_mesh('objs/ico_s2.obj')
+    #return (verts, edges)
+    nPerturbations = 4
+    wavelength_range = 1
+
+    # for p in range(nPerturbations):
+    #         wavelength = random.random() * wavelength_range
+    #         new_verts = verts
+    #         n_verts = len(new_verts)
+        
+    #         # set up rotational matricies
+    #         rotation_mat_x = gen_rotation_mat((math.radians(random.random() * 2* math.pi), 0, 0))
+    #         rotation_mat_y = gen_rotation_mat((0, math.radians(random.random() * 2* math.pi), 0))
+    #         rotation_mat_z = gen_rotation_mat((0, 0, math.radians(random.random() * 2* math.pi)))
+            
+    #         # set new positions for each vertex
+    #         for v in range(n_verts):
+    #             # vertex coordinate indices
+    #             x = 0
+    #             y = 1
+    #             z = 2
+            
+    #             vert = new_verts[v]
+    #             temp = (vert[x], vert[y] + math.sin(wavelength * vert[x]), vert[z])
+    #             vert = [temp[0], temp[1], temp[2]]
+                
+    #             vert = np.array(rotation_mat_x) @ np.array(vert)
+    #             vert = np.array(rotation_mat_y) @ np.array(vert)
+    #             vert = np.array(rotation_mat_z) @ np.array(vert)
+
+    #             new_verts[v] = vert
+
+    #return (verts, edges)
+    
+    for p in range(nPerturbations):
+        for v in range(len(verts)):
+            vert = verts[v]
+            vert = np.array([vert[0], vert[1], vert[2]])
+            [x, y, z] = gen_randXYZ(-0.08, 0.08)
+            vert = (vert[0] + x, vert[1] + y, vert[2] + z)
+            verts[v] = vert
+    return (verts, edges)
+
 
 
                    ########################################

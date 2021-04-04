@@ -24,8 +24,7 @@ class AsteroidField:
     def gen_asteroids(self):
         asteroids = []
         for d in range(self.density):
-            radius = random.uniform(0.25, 0.35)
-            [verts, edges] = gen_icosahedron(radius)
+            [verts, edges] = gen_asteroid()
             asteroids.append(Asteroid(verts, edges))
         return asteroids
 

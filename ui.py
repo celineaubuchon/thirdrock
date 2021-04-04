@@ -36,26 +36,27 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 
         # translates scene (moves the ship through space)
-        #glTranslatef(0.0, 0.0, 0.01) # speed is set by z, x and y could be used for steering?
+        glTranslatef(0.0, 0.0, 0.01) # speed is set by z, x and y could be used for steering?
         
         # draws each asteroid
-        # for asteroid in asteroid_field.asteroids:
-        #     (r_x, r_y, r_z) = asteroid.rotation_data
-        #     (t_x, t_y, t_z) = asteroid.translation_data
+        for asteroid in asteroid_field.asteroids:
+            (r_x, r_y, r_z) = asteroid.rotation_data
+            (s_x, s_y, s_z) = asteroid.scale_data
+            (t_x, t_y, t_z) = asteroid.translation_data
 
-        #     # permanently rotates each vertex about the origin
-        #     asteroid.rotate((r_x, r_y, r_z))
+            # permanently rotates each vertex about the origin
+            asteroid.rotate((r_x, r_y, r_z))
 
-        #     # draws the current asteroid
-        #     glPushMatrix()
-        #     glTranslatef(t_x, t_y, t_z) # translates it to its location in space
-        #     asteroid.draw() # draws it
-        #     modelview = glGetFloatv(GL_MODELVIEW_MATRIX)
-        #     glPopMatrix()
-        glRotatef(1, 0, 3, 1)
-        sphere(1)
+            # draws the current asteroid
+            glPushMatrix()
+            glScalef(s_x, s_y, s_z)
+            glTranslatef(t_x, t_y, t_z) # translates it to its location in space
+            asteroid.draw() # draws it
+            modelview = glGetFloatv(GL_MODELVIEW_MATRIX)
+            glPopMatrix()
+
         pygame.display.flip() # draw the buffers
-        pygame.time.wait(20) # wait 20 millisecs
+        pygame.time.wait(10) # wait 20 millisecs
         #########################################################################
 
 
