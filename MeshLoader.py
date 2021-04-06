@@ -18,7 +18,6 @@ class MeshLoader:
         edges = []
         f = open(self.filepath, 'r') # opens the obj file to read it
         for line in f:
-            print(line)
             line = line.strip('\n').split(' ')
             if line[0] == 'v':
                 [x, y, z] = line[1:]

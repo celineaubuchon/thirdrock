@@ -144,38 +144,8 @@ def load_mesh(filepath):
 
 def gen_asteroid():
     [verts, edges] = load_mesh('objs/ico_s2.obj')
-    #return (verts, edges)
     nPerturbations = 4
     wavelength_range = 1
-
-    # for p in range(nPerturbations):
-    #         wavelength = random.random() * wavelength_range
-    #         new_verts = verts
-    #         n_verts = len(new_verts)
-        
-    #         # set up rotational matricies
-    #         rotation_mat_x = gen_rotation_mat((math.radians(random.random() * 2* math.pi), 0, 0))
-    #         rotation_mat_y = gen_rotation_mat((0, math.radians(random.random() * 2* math.pi), 0))
-    #         rotation_mat_z = gen_rotation_mat((0, 0, math.radians(random.random() * 2* math.pi)))
-            
-    #         # set new positions for each vertex
-    #         for v in range(n_verts):
-    #             # vertex coordinate indices
-    #             x = 0
-    #             y = 1
-    #             z = 2
-            
-    #             vert = new_verts[v]
-    #             temp = (vert[x], vert[y] + math.sin(wavelength * vert[x]), vert[z])
-    #             vert = [temp[0], temp[1], temp[2]]
-                
-    #             vert = np.array(rotation_mat_x) @ np.array(vert)
-    #             vert = np.array(rotation_mat_y) @ np.array(vert)
-    #             vert = np.array(rotation_mat_z) @ np.array(vert)
-
-    #             new_verts[v] = vert
-
-    #return (verts, edges)
     
     for p in range(nPerturbations):
         for v in range(len(verts)):
@@ -192,9 +162,9 @@ def gen_asteroid():
 ####################                 DRAW                 #####################
                    ########################################
 
-def drawShapeLines(vertices, edges):
+def drawShapeLines(vertices, edges, col):
     glBegin(GL_LINES) # drawing mode lines
-    glColor3f(0,1,0) # set color to green
+    glColor3f(col[0],col[1],col[2]) # set color to green
     for edge in edges:
         for vert in edge:
             curr_v = vertices[vert]

@@ -14,13 +14,14 @@ def main():
 
     # sets up perspective projection: 
     # viewing angle, aspect ratio, near clipping plane, far clipping plane
-    gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+    gluPerspective(45, (display[0]/display[1]), 0.1, 15.0)
 
-    glTranslatef(0.0, 0.0, -5.0) # zoom out 
+    camera_displacement = -5
+    glTranslatef(0.0, 0.0, camera_displacement) # zoom out 
     glRotatef(0.0, 0.0, 0.0, 0.0) # not doing anything right now
 
     #initialize asteroid field 
-    asteroid_field = AsteroidField(15) # takes in number of asteroids
+    asteroid_field = AsteroidField(10) # takes in number of asteroids
 
     #infinite loop
     while True:
@@ -36,8 +37,10 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 
         # translates scene (moves the ship through space)
-        glTranslatef(0.0, 0.0, 0.01) # speed is set by z, x and y could be used for steering?
+        z = 0.1
+        #glTranslatef(0.0, 0.0, z) # speed is set by z, x and y could be used for steering?
         
+        gone = 0
         # draws each asteroid
         for asteroid in asteroid_field.asteroids:
             (r_x, r_y, r_z) = asteroid.rotation_data
@@ -47,16 +50,23 @@ def main():
             # permanently rotates each vertex about the origin
             asteroid.rotate((r_x, r_y, r_z))
 
+            # updates the location of the asteroid center
+            c = asteroid.center
+            asteroid.center = (c[0], c[1], c[2] + z)
+            asteroid.translation_data = (t_x, t_y, t_z + z)
+            # ugh, I just had a sign error but now its working
+            if(asteroid.center[2] + camera_displacement > 5):
+                asteroid_field.del_asteroid(asteroid)
+                asteroid_field.add_asteroid()
             # draws the current asteroid
             glPushMatrix()
             glScalef(s_x, s_y, s_z)
             glTranslatef(t_x, t_y, t_z) # translates it to its location in space
             asteroid.draw() # draws it
-            modelview = glGetFloatv(GL_MODELVIEW_MATRIX)
             glPopMatrix()
-
+        #print(asteroid_field.asteroids[0].center)
         pygame.display.flip() # draw the buffers
-        pygame.time.wait(10) # wait 20 millisecs
+        pygame.time.wait(20) 
         #########################################################################
 
 

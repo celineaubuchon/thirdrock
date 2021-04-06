@@ -42,3 +42,10 @@ def apply_transformation(verts, mat):
         v = (v[0], v[1], v[2])
         verts[i] = v
     return verts
+
+#### One idea for collision detections
+# s part of the asteroid field, also have a field of points that are the centers of each object
+# actually transform the locations of each point
+# use the center + radius to check collisions
+# this can also be used to delete asteroids?
+ 

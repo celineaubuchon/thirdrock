@@ -20,7 +20,9 @@ class Asteroid:
         self.edges = edges
         self.translation_data = gen_randXYZ(-6.0, 6.0)
         self.rotation_data = gen_randXYZ(-0.5, 0.5)
-        self.scale_data = gen_randXYZ(0.15, 0.45)
+        self.scale_data = gen_randXYZ(0.25, 0.45)
+        self.center = self.translation_data
+        self.col = (0, 1, 0)
 
     def rotate(self, ang):
     # rotates asteroid by ang, and xyz rotation vector
@@ -28,4 +30,4 @@ class Asteroid:
         apply_transformation(self.vertices, rot_mat)
 
     def draw(self):
-        drawShapeLines(self.vertices, self.edges)
+        drawShapeLines(self.vertices, self.edges, self.col)
