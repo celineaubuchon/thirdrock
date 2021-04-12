@@ -77,8 +77,8 @@ def main():
             # permanently rotates each vertex about the origin
             asteroid.rotate((r_x, r_y, r_z))
 
-            # ugh, I just had a sign error but now its working
-            if(asteroid.center[2] + camera_displacement > 5):
+            # check is asteroid left field of view, delete and add a new one if so
+            if(asteroid.center[2] + camera_displacement > abs(camera_displacement) + 1):
                 asteroid_field.del_asteroid(asteroid)
                 asteroid_field.add_asteroid()
 
@@ -93,6 +93,13 @@ def main():
             c = asteroid.center
             asteroid.center = (c[0] + x, c[1] + y, c[2] + z)
             asteroid.translation_data = (t_x + x, t_y + y, t_z + z)
+
+            # checks for collision between ship and current asteroid
+            collision = asteroid.detect_collision((0.0, -1.5, 11), 1.0)
+            if collision:
+                asteroid.col = (1, 0, 0)
+                x = 0; y = 0; z = 0
+
         
         # draw the ship
         glPushMatrix()

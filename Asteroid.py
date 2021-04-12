@@ -29,5 +29,12 @@ class Asteroid:
         rot_mat = gen_rotation_mat(ang)
         apply_transformation(self.vertices, rot_mat)
 
+    def detect_collision(self, vec, rad):
+    # checks if the point defined by vec is within radius rad of the 
+    # asteroid
+        dist = distance3D(vec, self.center)
+        #print("dist:", dist)
+        return (dist < rad)
+
     def draw(self):
         drawShapeLines(self.vertices, self.edges, self.col)

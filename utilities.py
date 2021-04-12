@@ -42,6 +42,13 @@ def apply_transformation(verts, mat):
         v = (v[0], v[1], v[2])
         verts[i] = v
     return verts
+def distance3D(vec1, vec2):
+# calculates the distance between vec1, and vec2, which are both xyz coord
+    x1 = vec1[0]; y1 = vec1[1]; z1 = vec1[2]
+    x2 = vec2[0]; y2 = vec2[1]; z2 = vec2[2]
+
+    return ((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)**0.5
+
 
 #### One idea for collision detections
 # s part of the asteroid field, also have a field of points that are the centers of each object
