@@ -2,6 +2,11 @@ import math
 from math import cos, sin
 import random
 import numpy as np
+import pygame
+from pygame.locals import *
+from OpenGL.GL import *
+from OpenGL.GLU import *
+import OpenGL.GLUT
 
                    ########################################
 ####################              UTILITIES               #####################
@@ -49,10 +54,13 @@ def distance3D(vec1, vec2):
 
     return ((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)**0.5
 
+def drawText(position, textString, color, size):   
+# draws text starting at 3D position, thank you https://www.pygame.org/wiki/CrossPlatformTextOpengl 
+#  expects 4 channel color out of 255  
+    font = pygame.font.Font (None, size)
+    textSurface = font.render(textString, True, color, (0,0,0,255))     
+    textData = pygame.image.tostring(textSurface, "RGBA", True)     
+    glRasterPos3d(*position)     
+    glDrawPixels(textSurface.get_width(), textSurface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, textData)
 
-#### One idea for collision detections
-# s part of the asteroid field, also have a field of points that are the centers of each object
-# actually transform the locations of each point
-# use the center + radius to check collisions
-# this can also be used to delete asteroids?
  

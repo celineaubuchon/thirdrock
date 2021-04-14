@@ -2,10 +2,13 @@ import pygame
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
+import OpenGL.GLUT
 from shapes import * # script I made that contains drawing functions for shapes
 from AsteroidField import AsteroidField # class representing an asteroid field
 from utilities import * # utility functions I wrote to handle general calculations
 
+def draw_score(score):
+    drawText((-2.5, -2, 0), "score: "+str(score), (0, 255, 0, 255), 32)
 def handle_keypress(event):
     valid = True
     speed = 0.1
@@ -25,10 +28,7 @@ def handle_keypress(event):
     if event.type == pygame.KEYUP:
         x = 0.0; y = 0.0
     return (x, y, valid)
-            
-        
-    
-    return (x, y)
+
 def main():
     pygame.init() # initializes pygame
     display = (800, 600) # width and height of display box
@@ -46,6 +46,8 @@ def main():
     [ship_verts, ship_edges] = load_mesh('objs/ship.obj')
     #initialize asteroid field 
     asteroid_field = AsteroidField(10) # takes in number of asteroids
+    #initialize score
+    score = 0
 
     # translates scene (moves the ship through space)
     x = 0.0
@@ -77,7 +79,8 @@ def main():
         
         # clear color and depth buffers at the beginning of current frame
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-
+        # draw score
+        draw_score(score)
         # draws each asteroid
         for asteroid in asteroid_field.asteroids:
             # permanently rotates each vertex about the origin
