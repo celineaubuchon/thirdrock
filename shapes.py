@@ -170,3 +170,10 @@ def drawShapeLines(vertices, edges, col):
             curr_v = vertices[vert]
             glVertex3f(curr_v[0], curr_v[1], curr_v[2])
     glEnd()
+
+def drawShip(ship_verts, ship_edges):
+    glPushMatrix()
+    glScale(0.75, 0.75, 0.75)
+    glTranslate(0, -1.5, 0.5)
+    drawShapeLines(ship_verts, ship_edges, (0.75, 0.4, 0.6))
+    glPopMatrix()

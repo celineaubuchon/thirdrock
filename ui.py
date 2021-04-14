@@ -4,7 +4,8 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from shapes import * # script I made that contains drawing functions for shapes
 from AsteroidField import AsteroidField # class representing an asteroid field
-from utilities import *
+from utilities import * # utility functions I wrote to handle general calculations
+
 def handle_keypress(event):
     valid = True
     speed = 0.1
@@ -51,6 +52,15 @@ def main():
     y = 0.0
     z = 0.2
     #infinite loop
+
+    # name sounds to be called
+    game_music = pygame.mixer.music.load("sounds/game_music.wav")
+    collision_sound = pygame.mixer.Sound("sounds/collision.wav")
+    collect_sound = pygame.mixer.Sound("sounds/collect.wav")
+    game_over_sound = pygame.mixer.Sound("sounds/game_over.wav")
+
+    # start game music
+    pygame.mixer.music.play(-1)
     while True:
     
         ############################ MANAGE EVENTS ##############################
@@ -70,43 +80,27 @@ def main():
 
         # draws each asteroid
         for asteroid in asteroid_field.asteroids:
-            (r_x, r_y, r_z) = asteroid.rotation_data
-            (s_x, s_y, s_z) = asteroid.scale_data
-            (t_x, t_y, t_z) = asteroid.translation_data
-
             # permanently rotates each vertex about the origin
-            asteroid.rotate((r_x, r_y, r_z))
+            asteroid.rotate()
 
-            # check is asteroid left field of view, delete and add a new one if so
-            if(asteroid.center[2] + camera_displacement > abs(camera_displacement) + 1):
-                asteroid_field.del_asteroid(asteroid)
-                asteroid_field.add_asteroid()
+            # check if asteroid left field of view, delete and add a new one if so
+            asteroid_field.check_asteroid_status(asteroid, camera_displacement)
 
             # draws the current asteroid
-            glPushMatrix()
-            glScalef(s_x, s_y, s_z)
-            glTranslatef(t_x, t_y, t_z) # translates it to its location in space
-            asteroid.draw() # draws it
-            glPopMatrix()
+            asteroid.draw()
 
             # updates the location of the asteroid center
-            c = asteroid.center
-            asteroid.center = (c[0] + x, c[1] + y, c[2] + z)
-            asteroid.translation_data = (t_x + x, t_y + y, t_z + z)
+            asteroid.update_center(x, y, z)
 
             # checks for collision between ship and current asteroid
             collision = asteroid.detect_collision((0.0, -1.5, 11), 1.0)
             if collision:
+                collision_sound.play()
                 asteroid.col = (1, 0, 0)
                 x = 0; y = 0; z = 0
 
-        
         # draw the ship
-        glPushMatrix()
-        glScale(0.75, 0.75, 0.75)
-        glTranslate(0, -1.5, 0.5)
-        drawShapeLines(ship_verts, ship_edges, (0.75, 0.4, 0.6))
-        glPopMatrix()
+        drawShip(ship_verts, ship_edges)
 
         pygame.display.flip() # draw the buffers
         pygame.time.wait(20) 

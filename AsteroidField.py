@@ -38,4 +38,9 @@ class AsteroidField:
 
     def del_asteroid(self, asteroid):
         self.asteroids.remove(asteroid)
+    
+    def check_asteroid_status(self, asteroid, camera_displacement):
+        if(asteroid.center[2] + camera_displacement > abs(camera_displacement) + 1):
+            self.del_asteroid(asteroid)
+            self.add_asteroid()
 

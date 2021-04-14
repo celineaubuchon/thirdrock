@@ -24,8 +24,9 @@ class Asteroid:
         self.center = self.translation_data
         self.col = (0, 1, 0)
 
-    def rotate(self, ang):
+    def rotate(self):
     # rotates asteroid by ang, and xyz rotation vector
+        ang = self.rotation_data
         rot_mat = gen_rotation_mat(ang)
         apply_transformation(self.vertices, rot_mat)
 
@@ -33,8 +34,20 @@ class Asteroid:
     # checks if the point defined by vec is within radius rad of the 
     # asteroid
         dist = distance3D(vec, self.center)
-        #print("dist:", dist)
+        
         return (dist < rad)
 
+    def update_center(self, x, y, z):
+        c = self.center
+        self.center = (c[0] + x, c[1] + y, c[2] + z)
+        (t_x, t_y, t_z) = self.translation_data
+        self.translation_data = (t_x + x, t_y + y, t_z + z)
+
     def draw(self):
+        (s_x, s_y, s_z) = self.scale_data
+        (t_x, t_y, t_z) = self.translation_data
+        glPushMatrix()
+        glScalef(s_x, s_y, s_z)
+        glTranslatef(t_x, t_y, t_z) # translates it to its location in space
         drawShapeLines(self.vertices, self.edges, self.col)
+        glPopMatrix()
