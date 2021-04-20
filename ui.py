@@ -9,6 +9,10 @@ from utilities import * # utility functions I wrote to handle general calculatio
 
 def draw_score(score):
     drawText((-2.5, -2, 0), "score: "+str(score), (0, 255, 0, 255), 32)
+
+def draw_game_over():
+    drawText((-1, 0, 0), "game over", (0, 255, 0, 255), 80)
+
 def handle_keypress(event):
     valid = True
     speed = 0.1
@@ -52,9 +56,8 @@ def main():
     # translates scene (moves the ship through space)
     x = 0.0
     y = 0.0
-    z = 0.2
-    #infinite loop
-
+    z = 0.2 # z represents the speed
+    
     # name sounds to be called
     game_music = pygame.mixer.music.load("sounds/game_music.wav")
     collision_sound = pygame.mixer.Sound("sounds/collision.wav")
@@ -63,8 +66,10 @@ def main():
 
     # start game music
     pygame.mixer.music.play(-1)
-    while True:
-    
+
+    game_over = False
+    # infinite loop
+    while not game_over:
         ############################ MANAGE EVENTS ##############################
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # if user closes the window
@@ -81,7 +86,8 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         # draw score
         draw_score(score)
-        # draws each asteroid
+
+        # draws and maintains each asteroid
         for asteroid in asteroid_field.asteroids:
             # permanently rotates each vertex about the origin
             asteroid.rotate()
@@ -101,13 +107,61 @@ def main():
                 collision_sound.play()
                 asteroid.col = (1, 0, 0)
                 x = 0; y = 0; z = 0
+                game_over = True
+                #game_over_sound.play()
 
         # draw the ship
+
+        for star in asteroid_field.star_particles:
+            asteroid_field.check_star_status(star, camera_displacement)
+            star.draw()
+            star.update_center(x, y, z)
+
+            # checks for collision between ship and current asteroid
+            collision = star.detect_collision((0.0, -1.5, 11), 1.0)
+            if collision:
+                collect_sound.play()
+                asteroid_field.del_star(star)
+                score += 1
+            
         drawShip(ship_verts, ship_edges)
 
         pygame.display.flip() # draw the buffers
         pygame.time.wait(20) 
+
         #########################################################################
+    ## GAME OVER LOOP
+    ticks = pygame.time.get_ticks()
+    play_sound = True
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: # if user closes the window
+                pygame.quit()
+                quit()
+        if (pygame.time.get_ticks() > 1000 + ticks) and play_sound:
+            game_over_sound.play()
+            play_sound = False
+
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+        # draw score
+        draw_score(score)
+
+        # draws and maintains each asteroid
+        for asteroid in asteroid_field.asteroids:
+            # permanently rotates each vertex about the origin
+            asteroid.rotate()
+            asteroid.draw()
+
+        for star in asteroid_field.asteroids:
+            star.draw()
+
+        drawShip(ship_verts, ship_edges)
+
+        draw_game_over()
+
+        pygame.display.flip() # draw the buffers
+        pygame.time.wait(20) 
+
 
 
 ############################################################################################

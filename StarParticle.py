@@ -9,32 +9,26 @@ from utilities import *
 
 
                    ########################################
-####################            CLASS: ASTEROID           #####################
+####################          CLASS: StarParticle         #####################
                    ########################################
     
-    #   A class to contain all of the information needed to maintain one asteroid
+    #   A class to contain all of the information needed to maintain one star
+    #   particle.
 
-class Asteroid:
+class StarParticle:
     def __init__(self, verts, edges):
         self.vertices = verts
         self.edges = edges
         self.translation_data = gen_randXYZ(-6.0, 6.0)
         self.rotation_data = gen_randXYZ(-0.5, 0.5)
-        self.scale_data = gen_randXYZ(0.25, 0.45)
+        self.scale_data = gen_randXYZ(1.5, 2.0)
         self.center = self.translation_data
-        self.col = (0, 1, 0)
-        
-    def rotate(self):
-    # rotates asteroid by ang, and xyz rotation vector
-        ang = self.rotation_data
-        rot_mat = gen_rotation_mat(ang)
-        apply_transformation(self.vertices, rot_mat)
+        self.col = (1, 0, 1)
 
     def detect_collision(self, vec, rad):
     # checks if the point defined by vec is within radius rad of the 
     # asteroid
         dist = distance3D(vec, self.center)
-        
         return (dist < rad)
 
     def update_center(self, x, y, z):
