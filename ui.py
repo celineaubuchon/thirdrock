@@ -6,11 +6,13 @@ import OpenGL.GLUT
 from shapes import * # script I made that contains drawing functions for shapes
 from AsteroidField import AsteroidField # class representing an asteroid field
 from utilities import * # utility functions I wrote to handle general calculations
+
 def draw_title():
+# draw the title on the center of the screen
     drawText((-1, 0, 0), "thirdrock", (0, 255, 0, 255), 80)
 
 def draw_options(diff):
-
+# draw different difficulty options (easy or hard)
     if diff == 'easy':
         easy = "X"
         hard = " "
@@ -23,6 +25,7 @@ def draw_options(diff):
     drawText((0.25, -1.25, 0), "(e) hard[" +hard+"]", (0, 255, 0, 100), 32)
 
 def set_difficulty(easy):
+# set the game difficulty (change the speed) depending on boolean 'easy'
     if easy:
         speed = 0.2
     else:
@@ -30,12 +33,15 @@ def set_difficulty(easy):
     return speed
 
 def draw_score(score):
+# draw the current score on the bottom left of the screen
     drawText((-2.5, -2, 0), "score: "+str(score), (0, 255, 0, 255), 32)
 
 def draw_game_over():
+# draw "game over" in the center of the screen
     drawText((-1, 0, 0), "game over", (0, 255, 0, 255), 80)
 
 def handle_keypress(event):
+# handles all keypresses, in the start screen it has strange logic, but it works
     valid = True
     speed = 0.1
     key = event.key
@@ -83,26 +89,31 @@ def main():
     #######################################################################################
     #########################         START SCREEN          ###############################
     #######################################################################################
+
+    # initialize parameters
     menu = True
     diff = "easy"
     speed = 0.2
+
+    # while the game hasn't started
     while menu:
+        # check for py game events
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: # if user closes the window
+            # if user closes the window
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            # if the user presses or releases a key
             if (event.type == pygame.KEYDOWN) or (event.type == pygame.KEYUP):
-                [a, b, space] = handle_keypress(event) # a and b are not used
-                if space and b < 0:
+                [a, b, space] = handle_keypress(event)
+                if space and b < 0: # space is a bool representing whether the 
+                    # space bar has been pressed
                     menu = False
-                if not space:
-                    print("got here", a, b)
+                if not space: # if user presses the difficulty keys
                     if a > 0 and b < 0:
-                        print("got to easy")
                         diff = "easy"
                         speed = set_difficulty(True)
                     elif a < 0 and b < 0: 
-                        print("got to hard")
                         diff = "hard"
                         speed = set_difficulty(False)
 
@@ -183,17 +194,21 @@ def main():
         # draw the ship
 
         for star in asteroid_field.star_particles:
+            # check if star is out of camera bounds
             asteroid_field.check_star_status(star, camera_displacement)
+            # draw start
             star.draw()
+            # update the center of the star to be the new location
             star.update_center(x, y, z)
 
             # checks for collision between ship and current asteroid
-            collision = star.detect_collision((0.0, -1.5, 11), 1.0)
-            if collision:
+            collision = star.detect_collision((0.0, -1.5, 11), 1.5)
+            if collision: # if collison with start occurred
                 collect_sound.play()
                 asteroid_field.del_star(star)
                 score += 1
-            
+        
+        # draw the ship at the lower center of the screen
         drawShip(ship_verts, ship_edges)
 
         pygame.display.flip() # draw the buffers
@@ -203,6 +218,7 @@ def main():
     #######################################################################################
     #########################           GAME OVER           ###############################
     #######################################################################################
+    # only gets here if use reached game over (hits an asteroid)
     ticks = pygame.time.get_ticks()
     play_sound = True
     while True:
@@ -218,17 +234,18 @@ def main():
         # draw score
         draw_score(score)
 
+        ## Draws the asteroid field as it was a during the collision
         # draws and maintains each asteroid
         for asteroid in asteroid_field.asteroids:
             # permanently rotates each vertex about the origin
             asteroid.rotate()
             asteroid.draw()
-
+        ## Draws the stars as they were at the time of collision
         for star in asteroid_field.asteroids:
             star.draw()
-
+        # draw the ship
         drawShip(ship_verts, ship_edges)
-
+        # draw game over in the center of the screen
         draw_game_over()
 
         pygame.display.flip() # draw the buffers

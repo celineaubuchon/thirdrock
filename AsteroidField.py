@@ -16,6 +16,9 @@ from StarParticle import StarParticle # the StarParticle class
     #   every asteroid in the field, and can be updated to reflect when the locations 
     #   of the asteroids change.
 
+    #   Functions are not commented because been written with names that make their 
+    #   purpose clear.
+
 
 class AsteroidField:
     def __init__(self, density):

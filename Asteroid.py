@@ -38,6 +38,7 @@ class Asteroid:
         return (dist < rad)
 
     def update_center(self, x, y, z):
+    # updates the center of the asteroid to reflect the new location
         c = self.center
         self.center = (c[0] + x, c[1] + y, c[2] + z)
         (t_x, t_y, t_z) = self.translation_data

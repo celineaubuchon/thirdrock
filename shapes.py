@@ -6,6 +6,8 @@ from OpenGL.GLU import *
 from MeshLoader import MeshLoader
 from utilities import *
 
+# note: not all of these functions are used in the program, many were used 
+# for testing while the prgram was being developed
 
                    ########################################
 ####################                CUBE                  #####################
