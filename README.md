@@ -30,7 +30,6 @@
     # ui.py
       > where the OpenGL buffer is created, and most function to do with the game window
       > contains the 'main' function that runs the game
-      > 
     # utilities.py
       > contains functions that are useful to other files, but don't fit into a category
       >   many of these are related to math calculations
@@ -40,8 +39,7 @@
       >   in the final game but were still beneficial to create!
     # AsteroidField.py
       > contains the AsteroidField class that maintains all information about the asteroid
-      >   field generated during game play
-      >   
+      >   field generated during game play  
     # Asteroid.py
       > contains the Asteroid class, which contains all information to maintain a single 
       >   asteroid
