@@ -5,13 +5,13 @@
 ####################              THIRD ROCK              #####################
                    ########################################
 
-  # A 3D space exploration/asteroid avoidance game! Fly through an infinitely 
-  # generating random asteroid field, and collect star particles as you pass by
-  # them. Fun for all ages!
+    # A 3D space exploration/asteroid avoidance game! Fly through an infinitely 
+    # generating random asteroid field, and collect star particles as you pass by
+    # them. Fun for all ages!
   
   ## Required Libraries
-  # PyOpenGL
-  # PyGame
+    # PyOpenGL
+   # PyGame
   
   ## How to run:
       # (through vscode) install libraries
