@@ -1,10 +1,6 @@
 # thirdrock
 # python 3.7
 
-                   ########################################
-####################              THIRD ROCK              #####################
-                   ########################################
-
     # A 3D space exploration/asteroid avoidance game! Fly through an infinitely 
     # generating random asteroid field, and collect star particles as you pass by
     # them. Fun for all ages!
