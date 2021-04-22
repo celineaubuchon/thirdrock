@@ -7,7 +7,7 @@
   
   ## Required Libraries
     # PyOpenGL
-   # PyGame
+    # PyGame
   
   ## How to run:
       # (through vscode) install libraries
